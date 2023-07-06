@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+
 # server/app.py
 # export FLASK_APP=app.py
 # export FLASK_RUN_PORT=5555
@@ -6,35 +7,42 @@
 # flask db revision --autogenerate -m 'Create tables' 
 # flask db upgrade 
 # Standard imports/boilerplate setup
-
-from dotenv import load_dotenv
 import os
+from dotenv import load_dotenv
+import psycopg2
 
-from flask import Flask, make_response
+from flask import Flask, request, make_response, jsonify
 from flask_migrate import Migrate
+from flask_restful import Api, Resource
 
 from models import db, Pet, Owner
 
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
 # Load the environment variables from the .env file:
 load_dotenv()  # take environment variables from .env.
+
 # Get the environment variables:
 user = os.getenv('POSTGRESQL_USER')
 password = os.getenv('POSTGRESQL_PASSWORD')
 host = os.getenv('POSTGRESQL_HOST')
 port = os.getenv('POSTGRESQL_PORT')
 database = os.getenv('POSTGRESQL_DB')
+
 # Create the connection string:
 connection_string = f"postgresql://{user}:{password}@{host}:{port}/{database}"
+
 #------------------------------------------------------------------>
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = connection_string
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.json.compact = False
 
 migrate = Migrate(app, db)
-
 db.init_app(app)
+
+# Restful setup
+api = Api(app)
 
 @app.route('/')
 def index():
@@ -43,6 +51,14 @@ def index():
         200
     )
     return response
+
+@app.route('/hello', methods=['GET','POST'])
+def hello():
+    method = request.method
+    if method == "GET":
+        return {"Hello":True}
+    elif method == "POST":
+        return {"Hello":False}
 
 @app.route('/pets/<int:id>')
 def pet_by_id(id):
