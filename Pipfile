@@ -10,6 +10,8 @@ flask-sqlalchemy = "2.5.1"
 ipdb = "0.13.9"
 importlib-metadata = "6.0.0"
 importlib-resources = "5.10.0"
+faker = "*"
+python-dotenv = "*"
 
 [requires]
 python_full_version = "3.8.13"

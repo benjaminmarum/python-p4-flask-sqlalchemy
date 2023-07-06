@@ -52,3 +52,4 @@ jspm_packages
 
 instance
 server/*.db
+.env

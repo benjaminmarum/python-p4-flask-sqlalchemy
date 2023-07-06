@@ -1,14 +1,35 @@
-# server/app.py
-
 #!/usr/bin/env python3
+# server/app.py
+# export FLASK_APP=app.py
+# export FLASK_RUN_PORT=5555
+# flask db init
+# flask db revision --autogenerate -m 'Create tables' 
+# flask db upgrade 
+# Standard imports/boilerplate setup
+
+from dotenv import load_dotenv
+import os
 
 from flask import Flask, make_response
 from flask_migrate import Migrate
 
 from models import db, Pet, Owner
 
+#-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+# Load the environment variables from the .env file:
+load_dotenv()  # take environment variables from .env.
+# Get the environment variables:
+user = os.getenv('POSTGRESQL_USER')
+password = os.getenv('POSTGRESQL_PASSWORD')
+host = os.getenv('POSTGRESQL_HOST')
+port = os.getenv('POSTGRESQL_PORT')
+database = os.getenv('POSTGRESQL_DB')
+# Create the connection string:
+connection_string = f"postgresql://{user}:{password}@{host}:{port}/{database}"
+#------------------------------------------------------------------>
+
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = connection_string
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 migrate = Migrate(app, db)
