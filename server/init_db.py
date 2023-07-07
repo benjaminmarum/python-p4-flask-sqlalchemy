@@ -1,6 +1,8 @@
 import os
 import psycopg2
 
+#how to init a db with sql commands
+
 conn = psycopg2.connect(
         host=os.environ['POSTGRESQL_HOST'],
         database=os.environ['POSTGRESQL_DB'],
