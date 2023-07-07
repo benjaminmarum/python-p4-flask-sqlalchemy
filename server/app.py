@@ -12,10 +12,11 @@ from dotenv import load_dotenv
 import psycopg2
 
 from flask import Flask, request, make_response, jsonify
+
 from flask_migrate import Migrate
 from flask_restful import Api, Resource
 
-from models import db, Pet, Owner
+from models import db, Pet, Owner, Result
 
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
 # Load the environment variables from the .env file:
@@ -51,6 +52,11 @@ def index():
         200
     )
     return response
+
+@app.route('/<name>')
+def hello_name(name):
+    return "Hello {}!".format(name)
+
 
 @app.route('/hello', methods=['GET','POST'])
 def hello():
